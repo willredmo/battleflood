@@ -1,0 +1,364 @@
+@darkPrimaryColor:   #D32F2F;
+@primaryColor:       #F44336;
+@lightPrimaryColor:  #FFCDD2;
+@textPrimaryColor:   #FFFFFF;
+@accentColor:        #607D8B;
+@primaryTextColor:   #212121;
+@secondaryTextColor: #757575;
+@dividerColor:       #BDBDBD;
+@currentUserColor:   #28a745;
+@otherUserColor: 	 #007bff;
+
+* {
+	padding: 0;
+	margin: 0;
+	font-family: 'Roboto', sans-serif;
+}
+
+.bg-dark {
+	background-color: @darkPrimaryColor !important;
+}
+
+#header {
+	background-color: @primaryColor;
+	color: @textPrimaryColor;
+	font-weight: 300;
+	font-size: 2rem;
+}
+
+#footer {
+	background-color: @darkPrimaryColor;
+}
+
+main {
+	width: 100vw;
+	min-width: 1000px;
+	height: 100vh;
+	min-height: 600px;
+	display: flex;
+}
+
+.right {
+	width: 50%;
+	height: 100%;
+	background-color: @textPrimaryColor;
+}
+
+.left {
+	width: 50%;
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+
+#lobbyGameScreen {
+	height: 100%;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	div {
+		overflow: hidden;
+		border-radius: 20px;	
+		width: 400px;
+		background-color: @textPrimaryColor;
+		h1 {
+			font-weight: 300;
+			font-size: 1.5rem;
+			background-color: @darkPrimaryColor;
+			color: @textPrimaryColor;
+			text-align: center;
+			padding: 10px;
+		}
+		p {
+			font-size: 1.3rem;
+			padding: 10px;
+		}
+	}
+}
+
+#game {
+	width: 100%;
+	height: 100%;
+	.currentTurn {
+		height: 60px;
+		color: @textPrimaryColor;
+		font-size: 1.5rem;
+		text-align: center;
+		line-height: 3.2rem;
+		border-bottom: 2px solid @primaryTextColor;
+	}
+	.gameBlocks {
+		height: calc(100% - 230px);
+		rect {
+			stroke-width: 5;
+			stroke-opacity: 0;
+			stroke-linejoin: round;
+		}
+	}		
+	.inputBlocks {
+		height: 90px;
+		rect {
+			cursor: pointer;
+		}
+		.disabled {
+			cursor: not-allowed;
+			display: none;
+			opacity: 0.4;
+		}
+	}
+	.gameBlocks, .inputBlocks {
+		width: 500px;
+		margin: 0 auto;
+	}
+	.user1Info, .user2Info {
+		height: 40px;
+		display: flex;
+		justify-content: space-between;
+		color: @textPrimaryColor;
+		font-size: 1.5rem;
+		font-weight: 300;
+		padding: 0 10px;
+	}
+	.user1Info.current, .user2Info.current, .currentTurn.current {
+		background-color: @currentUserColor;
+	}
+	.user1Info.other, .user2Info.other, .currentTurn.other {
+		background-color: @otherUserColor;
+	}
+}
+
+#gameOver {
+	position: absolute;
+	width: 100%;
+	height: 100%; 
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	.background {
+		position: absolute;
+		background-color: @primaryTextColor;
+		opacity: .5;
+		width: 100%;
+		height: 100%;
+	}
+	.info {
+		height: 300px;
+		width: 300px;
+		background-color: @textPrimaryColor;
+		z-index: 1;
+		border-radius: 20px;
+		padding: 10px;
+		span {
+			display: block;
+		}
+		.result {
+			text-align: center;
+			padding: 10px 0;
+			font-size: 2.2rem;
+		}
+		button {
+			margin-left: 90px;
+			margin-top: 20px;
+		}
+	}
+	
+}
+
+.top {
+	height: 50px;
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+}
+
+#currentLobby {
+	margin: 0;
+}
+
+.section {
+	width: 100%;
+	border-top: 2px solid @accentColor;
+	h3 {
+		color: @textPrimaryColor;
+		background-color: @accentColor;
+		display: inline-block;
+		padding: 0px 5px 5px 5px;
+		border-radius: 0px 0px 10px 0px;
+		font-size: 1.2rem;
+		font-weight: 300;
+		height: 30px;
+	}
+}
+
+.usersSection {
+	height: calc(50% - 58px);
+}
+
+.chatSection {
+	height: 50%;
+}
+
+#users {
+	width: 100%;
+	height: calc(100% - 40px);
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	overflow-x: auto;
+	align-items: flex-start;
+	align-content: flex-start;
+}
+
+.btn-self {
+	background-color: #05728f;
+}
+
+#chat {
+	// background-color: @darkPrimaryColor;
+	width: 100%;
+	height: calc(100% - 30px);
+	.messages {
+		height: calc(100% - 40px);
+		overflow-x: auto;
+	}
+	.input {
+		display: flex;
+		input {
+			width: 100%;
+		}
+	}
+}
+
+
+// Templates
+.templates {
+	display: none;
+}
+
+.message {
+	padding: 10px;
+	.messageContainer {
+		background: #ebebeb none repeat scroll 0 0;
+		border-radius: 5px;
+		color: #646464;
+		font-size: 14px;
+		margin: 0;
+		padding: 5px 10px 5px 12px;
+		width: 100%;
+		.username {
+			font-weight: bolder;
+		}
+	}
+	.timestamp {
+		color: #747474;
+		display: block;
+		font-size: 12px;
+		margin: 8px 0 0;
+	}
+}
+
+.message.self {
+	.messageContainer {
+		background: #05728f none repeat scroll 0 0;
+		color: #fff;
+	}
+}
+
+.userButton {
+	margin: 7px;
+	.info i {
+		position: relative;
+    	top: 5px;
+	}
+}
+
+.waiting i {
+	animation: spin-animation 0.5s infinite;
+	display: inline-block;
+	  
+	@keyframes spin-animation {
+		0% {
+			transform: rotate(359deg);
+		}
+		100% {
+			transform: rotate(0deg);
+		}
+	}
+}
+
+.acceptDeclineOptions {
+	display: flex;
+	.accept {
+		width: 50%;
+	}
+	.decline {
+		width: 50%;
+	}
+}
+
+//  Login / Create User
+main { 
+	background-image:url("https://hdwallsource.com/img/2014/9/blur-26347-27038-hd-wallpapers.jpg"); 
+	background-repeat:no-repeat; 
+	background-position:center; 
+	background-size:cover; 
+}
+
+.form-heading { 
+	color:#fff; font-size:23px;
+}
+.panel h2{ 
+	color:#444444; font-size:18px; margin:0 0 8px 0;
+}
+.panel p { 
+	color:#777777; font-size:14px; margin-bottom:30px; line-height:24px;
+}
+.login-form .form-control, .create-form .form-control {
+	background: #f7f7f7 none repeat scroll 0 0;
+	border: 1px solid #d4d4d4;
+	border-radius: 4px;
+	font-size: 14px;
+	height: 50px;
+	line-height: 50px;
+}
+.main-div {
+  background: #ffffff none repeat scroll 0 0;
+  border-radius: 2px;
+  margin: 10px auto 30px;
+  padding: 50px 70px 70px 71px;
+}
+
+.login-form .form-group, .create-form .form-group {
+  margin-bottom:10px;
+}
+.login-form, .create-form { 
+	text-align:center;
+	margin: 0 auto;
+	margin-top: 150px; 
+}
+.create a, .back a {
+  color: #777777;
+  font-size: 14px;
+  text-decoration: underline;
+}
+.login-form  .btn.btn-primary, .create-form .btn.btn-primary {
+  background: #f0ad4e none repeat scroll 0 0;
+  border-color: #f0ad4e;
+  color: #ffffff;
+  font-size: 14px;
+  width: 100%;
+  height: 50px;
+  line-height: 50px;
+  padding: 0;
+}
+.create, .back {
+  text-align: left; margin-bottom:30px;
+}
+.login-form .btn.btn-primary.reset .create-form .btn.btn-primary.reset {
+ 	background: #ff9900 none repeat scroll 0 0;
+}
+
+.create-form {
+	display: none;
+}
