@@ -174,16 +174,11 @@ class Main {
 
     // Challenges user
     challengeUser(username) {
-        if (username == this.username) {
-            var waitingIcon = $(".templates .waiting").clone();
-            $("#onlineUser_" + username).find(".challengeStatus").append(waitingIcon);
-        }
         var data = {
             "username": username
         }
         this.MyXHR('get', { method: "challengeUser", a: "user", data: JSON.stringify(data) }, this).done((json) => {
             if (json != "") {
-                $("#onlineUser_" + username).find(".challengeStatus").remove();
                 Snackbar.show({
                     pos: "bottom-center",
                     text: json,
