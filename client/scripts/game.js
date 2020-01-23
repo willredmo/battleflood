@@ -39,10 +39,12 @@ class Game {
             this.getBoard();
             $("#game").show();
             $("#lobbyGameScreen").hide();
+            $("main").addClass("inGame");
         } else {
             this.stopRequesting = true;
             $("#lobbyGameScreen").show();
             $("#game").hide();
+            $("main").removeClass("inGame");
         }
     }
 
@@ -72,6 +74,9 @@ class Game {
         this.colors = data;
         var totalColors = data.length;
         var divWidth = $("#game .inputBlocks").width();
+        if (window.innerWidth < 500) {
+            divWidth = window.innerWidth;
+        }
         var divHeight = $("#game .inputBlocks").height();
         var blockSide = divWidth / totalColors;
 
@@ -108,11 +113,20 @@ class Game {
     updateTurn() {
         if (this.isYourTurn()) {
             $("#game .currentTurn").html("Your Turn");
-            $("#game .currentTurn").removeClass("other").addClass("current");
         } else {
             $("#game .currentTurn").html(this.userTurn + "'s Turn");
-            $("#game .currentTurn").removeClass("current").addClass("other");
         }
+    }
+
+    // Change background of current turn
+    changeTurnBackground() {
+        var backgroundColor;
+        if (this.userTurn == this.user1) {
+            backgroundColor = this.getColorValue(this.user1Color);
+        } else {
+            backgroundColor = this.getColorValue(this.user2Color);
+        }
+        $("#game .currentTurn").css("background-color", backgroundColor);
     }
 
     // Sends request for board
@@ -166,14 +180,8 @@ class Game {
             $("#game .user2Info .name").html(this.user2);
             this.user2Score = data.gameUser2Score;
             $("#game .user2Info .score").html("Score: " + this.user2Score);
-            if (this.username == this.user1) {
-                $("#game .user1Info").addClass("current").removeClass("other");
-                $("#game .user2Info").addClass("other").removeClass("current");
-            } else {
-                $("#game .user1Info").addClass("other").removeClass("current");
-                $("#game .user2Info").addClass("current").removeClass("other");
-            }
-
+            
+            // User turn
             this.userTurn = data.gameUserTurn;
             this.updateTurn();
 
@@ -181,6 +189,9 @@ class Game {
             this.user1Color = data.gameUser1Color;
             this.user2Color = data.gameUser2Color;
             this.updateInputBlocks();
+
+            // Turn background
+            this.changeTurnBackground();
             
             // Block stuff
             this.height = data.height;
@@ -227,6 +238,7 @@ class Game {
             // Input blocks
             if (inputChange) {
                 this.updateInputBlocks();
+                this.changeTurnBackground();
             }
 
             // Block stuff
@@ -246,7 +258,14 @@ class Game {
             if (changeInBlockOwner) {
                 this.displayBlockSides();
             }
+
+            
+            $("#game .user1Info").css("background-color", this.getColorValue(this.user1Color));
+            $("#game .user2Info").css("background-color", this.getColorValue(this.user2Color));
         }
+
+
+        
     }
 
     // Displays all blocks
@@ -307,7 +326,6 @@ class Game {
                         isCurrentUser = true;
                     } 
                     if (borderString != "") {
-                        console.log(block);
                         this.drawBorder(borderString, block.id, isCurrentUser);
                     }
                 }
@@ -373,17 +391,12 @@ class Game {
             default:
                 break;
         }
-        var strokeColor;
-        if (isCurrentUser) {
-            strokeColor = "#98e6ab";
-        } else {
-            strokeColor = "#80bdff";
-        }
-        console.log(strokeColor);
+        var strokeColor = "#e3e4e6";
         $("#block_" + id).css({
-            "stroke-opacity": "1",
+            "stroke-opacity": "0.85",
             "stroke-dasharray": css,
-            "stroke": strokeColor
+            "stroke": strokeColor,
+            "stroke-width": "1.8"
         });
         SVG.get("#block_" + id).front();
         
@@ -402,7 +415,9 @@ class Game {
     
     // Sends move to server
     sendMove(colorId) {
+        $(".loadingMove").css("display", "flex");
         this.MyXHR('get', { method: "makeMove", a: "game", data: colorId }, this).done((json) => {
+            $(".loadingMove").css("display", "none");
             if (json != "") {
                 Snackbar.show({
                     pos: "bottom-center",
@@ -449,5 +464,16 @@ class Game {
                 });
             }
         });
+    }
+
+    // Get color from id
+    getColorValue(id) {
+        for (var i = 0; i < this.colors.length; i++) {
+           var color = this.colors[i];
+           if (color.id == id) {
+               return color.colorValue;
+           }
+        }
+        return null;
     }
 }

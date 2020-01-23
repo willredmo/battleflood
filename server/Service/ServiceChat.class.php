@@ -4,8 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
     return;
 }
 
-require_once("BizData/DBChat.class.php");
-require_once("Service/ServiceUtils.php");
+require_once(__DIR__.'/ServiceUtils.php');
+require_once(__DIR__.'/../BizData/DBChat.class.php');
 
 class ServiceChat {
     private $db;
@@ -15,13 +15,6 @@ class ServiceChat {
 	 */
 	function __construct() {
 		$this->db = new DBChat();
-    }
-
-    /**
-     * Closes db connection
-     */
-    function closeDBConn() {
-        $this->db->closeConnection();
     }
 
     // Sends message

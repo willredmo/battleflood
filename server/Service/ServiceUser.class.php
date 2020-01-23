@@ -4,8 +4,8 @@ if (session_status() == PHP_SESSION_NONE) {
     return;
 }
 
-require_once("BizData/DBUser.class.php");
-require_once("Service/ServiceUtils.php");
+require_once(__DIR__.'/ServiceUtils.php');
+require_once(__DIR__.'/../BizData/DBUser.class.php');
 
 class ServiceUser {
     private $db;
@@ -17,13 +17,6 @@ class ServiceUser {
 	function __construct() {
         $this->db = new DBUser();
         $this->mainLobby = 0;
-    }
-
-    /**
-     * Closes db connection
-     */
-    function closeDBConn() {
-        $this->db->closeConnection();
     }
 
     /**
@@ -42,7 +35,7 @@ class ServiceUser {
             $_SESSION["username"] = $username;
             return "Success";
         } else {
-            return "Inncorrect  combination.";
+            return "Inncorrect combination.";
         }
     }
 
@@ -62,10 +55,12 @@ class ServiceUser {
      * Attempts to create user
      * @return String - if login was successful
      */
-    function createUser($username, $password) {    
+    function createUser($username, $password, $confirm) {    
         $errors = validateCreateUser($username, $password);
         if ($errors != "") {
             return $errors;
+        } else if ($password != $confirm) {
+            return "Confirm password and password do not match";
         }
         if ($this->db->checkUserExists($username)) {
             return "User already exists";

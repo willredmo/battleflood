@@ -2,8 +2,7 @@ var mainLobby = 0;
 
 // Class that handles lobby and user stuff
 class Main {
-
-    constructor(useranme) {
+    constructor(username) {
         this.username = username;
         this.onlineRefresh = 30000;
         this.lobbyRefresh = 1000;
@@ -25,6 +24,12 @@ class Main {
         this.getCurrentLobbyId();
         this.addMenuControls();
         this.getServerUsers();
+        this.initViewportHeight();
+    }
+
+    initViewportHeight() {
+        let vh = window.innerHeight * 0.01;
+        document.documentElement.style.setProperty('--vh', `${vh}px`);
     }
 
     // Resets lobby data and ui
@@ -33,7 +38,7 @@ class Main {
         this.currentUsers = new Map();
         this.currentChallenges = new Map();
         $("#users").empty();
-
+        
         // Reset chat
         this.chat.reset();
 
@@ -102,6 +107,20 @@ class Main {
         });
         $("#menu .gameLobby .newGame").click(() => {
             this.game.newGame();
+        });
+
+        $("#helpIcon").popover({
+            content: "To start a game you can challenge a player by selecting the user or challenge a bot by selecting yourself",
+            placement: "bottom",
+            trigger: "click"
+        });
+
+        var showingChat = false;
+        $("#chatIcon").click(() => {
+            $(".chatSection, #chatIcon").addClass("showChat");
+        });
+        $("#closeChatIcon").click(() => {
+            $(".chatSection, #chatIcon").removeClass("showChat");
         });
     }
 
@@ -285,7 +304,7 @@ class Main {
             type: getPost,
             async: true,
             cache: false,
-            url:'mid.php',
+            url:'../server/mid.php',
             data:d,
             dataType:'json',
             context: context

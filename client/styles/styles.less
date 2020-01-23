@@ -32,9 +32,9 @@
 
 main {
 	width: 100vw;
-	min-width: 1000px;
-	height: 100vh;
-	min-height: 600px;
+	// min-width: 1000px;
+	height: calc(var(--vh, 1vh) * 100);
+	// min-height: 600px;
 	display: flex;
 }
 
@@ -106,6 +106,20 @@ main {
 			display: none;
 			opacity: 0.4;
 		}
+		.loadingMove {
+			display: none;
+			background-color: rgba(20, 11, 11, 0.377);
+			width: 100%;
+			height: 90px;
+			position: absolute;
+			left: 0;
+    		justify-content: center;
+			align-items: center;
+			i {
+				color: @textPrimaryColor;
+				font-size: 60px;
+			}
+		}
 	}
 	.gameBlocks, .inputBlocks {
 		width: 500px;
@@ -166,6 +180,7 @@ main {
 }
 
 .top {
+	padding: 0 10px;
 	height: 50px;
 	display: flex;
 	justify-content: space-between;
@@ -183,7 +198,7 @@ main {
 		color: @textPrimaryColor;
 		background-color: @accentColor;
 		display: inline-block;
-		padding: 0px 5px 5px 5px;
+		padding: 2px 5px 5px 5px;
 		border-radius: 0px 0px 10px 0px;
 		font-size: 1.2rem;
 		font-weight: 300;
@@ -226,6 +241,7 @@ main {
 		display: flex;
 		input {
 			width: 100%;
+			padding: 3px;
 		}
 	}
 }
@@ -295,6 +311,13 @@ main {
 	.decline {
 		width: 50%;
 	}
+	.accept, .decline {
+		transition: all 0.2s ease-in-out;
+		&:hover {
+			transform: scale(1.4);
+		}
+		
+	}
 }
 
 //  Login / Create User
@@ -361,4 +384,122 @@ main {
 
 .create-form {
 	display: none;
+}
+
+#chatIcon, #helpIcon {
+	display: none;
+}
+
+// Mobile view
+@media only screen and (max-width: 990px) {
+	#chatIcon {
+		display: flex;
+		position: absolute;
+		right: 0;
+		cursor: pointer;
+		background-color: @accentColor;
+		color: whitesmoke;
+		width: 45px;
+		height: 45px;
+		justify-content: center;
+		align-items: center;
+		border-radius: 14px 0px 0px 0px;
+		transition: 1s;
+		i {
+			font-size: 30px;
+		}
+	}
+	#chatIcon.showChat {
+		right: 100%;
+	}
+	.right {
+		overflow: hidden;
+		position: absolute;
+		.top {
+			flex-wrap: wrap;
+			height: 100px;
+			align-items: flex-end;
+			padding: 0;
+			h2 {
+				padding-left: 10px;
+				font-size: 35px;
+			}
+			#menu {
+				width: 100%;
+				order: -1;
+				display: flex;
+				justify-content: flex-end;
+				padding-right: 10px;
+			}
+		}
+		.chatSection, .usersSection {
+			h3 {
+				display: flex;
+				border-radius: unset;
+				justify-content: space-between;
+				height: 35px;
+			}
+
+			#helpIcon, #closeChatIcon {
+				display: block;
+				font-size: 30px;
+				cursor: pointer;
+			}
+		}
+		.chatSection {
+			overflow: hidden;
+			display: block;
+			position: absolute;
+			top: 55px;
+			background-color: whitesmoke;
+			height: calc(100% - 56px);
+			left: 100%;
+			transition: 1s;
+			z-index: 4;
+			#chat {
+				height: calc(100% - 42px);
+			}
+		}
+		.chatSection.showChat {
+			transition: 1s;
+			left: 0;
+		}
+		.usersSection {
+			height: calc(100% - 100px);
+			#users {
+				height: calc(100% - 45px);
+			}
+		}
+	}
+
+	main {
+		.left {
+			display: none;
+		}
+		.right {
+			width: 100%;
+		}
+	}
+	main.inGame {
+		.usersSection {
+			display: none;
+		}
+		.left {
+			background-image:url("https://hdwallsource.com/img/2014/9/blur-26347-27038-hd-wallpapers.jpg"); 
+			background-repeat:no-repeat; 
+			background-position:center; 
+			background-size:cover; 
+			display: flex;
+			width: 100%;
+			z-index: 3;
+			height: calc(100% - 100px);
+			top: 100px;
+		}
+		#game {
+			.gameBlocks, .inputBlocks {
+				width: 100%;
+			}
+		}
+	}
+
 }

@@ -1,11 +1,17 @@
 <?php
 
 if (session_status() == PHP_SESSION_NONE) {
-    return;
+    // return;
 }
 
-require_once("BizData/DBGame.class.php");
-require_once("Service/ServiceUtils.php");
+require_once(__DIR__.'/ServiceUtils.php');
+require_once(__DIR__.'/../BizData/DBGame.class.php');
+
+function microtime_float()
+{
+    list($usec, $sec) = explode(" ", microtime());
+    return ((float)$usec + (float)$sec);
+}
 
 class ServiceGame {
     private $db;
@@ -17,13 +23,7 @@ class ServiceGame {
         // Create connection here
         $this->db = new DBGame();
         $this->currentBoard = [];
-    }
-
-    /**
-     * Closes db connection
-     */
-    function closeDBConn() {
-        $this->db->closeConnection();
+        $this->blocksToChange = [];
     }
 
     // Check if user is in game
@@ -37,19 +37,6 @@ class ServiceGame {
             return "";
         }
         $data = $this->db->getGameData($currentUser);
-        $data["gameUser1Score"] = 0;
-        $data["gameUser2Score"] = 0;
-        $data["totalBlocks"] = 0;
-        foreach($data["blocks"] as $index => $block) {
-            $data["totalBlocks"]++;
-            if ($block["gameUser"] == $data["gameUser1"]) {
-                $data["gameUser1Color"] = $block["colorId"];
-                $data["gameUser1Score"]++;
-            } else if ($block["gameUser"] == $data["gameUser2"]) {
-                $data["gameUser2Color"] = $block["colorId"];
-                $data["gameUser2Score"]++;
-            }
-        }
         return $data;
     }
     
@@ -65,6 +52,13 @@ class ServiceGame {
         $gameUserTurn;
         $otherUser;
         $lobbyUsers = $this->db->getLobbyUsers($currentUser);
+        // Sometimes does not return correctly
+        if (is_array($lobbyUsers[0])) {
+            $lobbyUsers[0] = $lobbyUsers[0]["username"];
+        }
+        if (isset($lobbyUsers[1]) && is_array($lobbyUsers[1])) {
+            $lobbyUsers[1] = $lobbyUsers[1]["username"];
+        }
         if (count($lobbyUsers) == 2) {
             if ($lobbyUsers[0] != $currentUser) {
                 $otherUser = $lobbyUsers[0];
@@ -87,7 +81,6 @@ class ServiceGame {
         $width = 25;
         $height = 30;
         $gameId;
-
         // Delete any old games
         $this->db->deleteOldGames($currentUser);
         $gameId = $this->db->newGame($lobbyId, $width, $height, $currentUser, $otherUser, $gameUserTurn, $isBot);
@@ -132,7 +125,7 @@ class ServiceGame {
         while ($board[$height - 1][0]["colorId"] == $board[$height - 1][1]["colorId"]) {
             $board[$height - 1][1]["colorId"] = $colors[rand(0, ($colorCount - 1))]["id"];
         }
- 
+
         // Set up first blocks owned by users
         $board[0][$width - 1]["gameUserId"] = $user1;
         $board[$height - 1][0]["gameUserId"] = $user2;
@@ -146,17 +139,20 @@ class ServiceGame {
 
     // Make move in game
     function makeMove($colorId) {
+        // $time_start = microtime_float();
+
         $currentUser = getUsername();
         if (!$this->isInGame($currentUser)) {
             return "Not currently in a game";
         }
-
         $board = $this->db->getGameData($currentUser);
         $user1 = $board["gameUser1"];
+        $this->blocksToChange[$user1] = [];
         $user2 = $board["gameUser2"];
+        $this->blocksToChange[$user2] = [];
         $isUser1;
-        $user1ColorId = null;
-        $user2ColorId = null;
+        $user1ColorId = $board["gameUser1Color"];
+        $user2ColorId = $board["gameUser2Color"];
         $userTurn = $board["gameUserTurn"];
         if ($board["gameUserWon"] != null) {
             return "Cannot make a move if game is over";
@@ -184,15 +180,6 @@ class ServiceGame {
         }
         if (!$foundColorId) {
             return "Color id does not exist";
-        }
-
-        // Get user colors
-        foreach($board["blocks"] as $index => $block) {
-            if ($block["gameUser"] == $user1) {
-                $user1ColorId = $block["colorId"];
-            } else if ($block["gameUser"] == $user2) {
-                $user2ColorId = $block["colorId"];
-            }
         }
 
         // Determine if color already taken
@@ -229,6 +216,7 @@ class ServiceGame {
             $this->checkBoard($board["height"], $board["width"], $board["height"] - 1, 0, $currentUser, $colorId);
             $this->db->changeTurn($board["id"], $user1);
         }
+        
         if ($board["isBot"]) {
             $isBotUser1 = ($user1 == "bot");
             $oldBotColor;
@@ -260,7 +248,7 @@ class ServiceGame {
                 $this->currentBoard[$block["y"]][$block["x"]] = $block;
                 $this->currentBoard[$block["y"]][$block["x"]]["checked"] = false;
             }
-
+            
             if ($isBotUser1) {
                 $this->checkBoard($board["height"], $board["width"], 0, $board["width"] - 1, "bot", $newBotColor);
                 $this->db->changeTurn($board["id"], $user2);
@@ -270,7 +258,18 @@ class ServiceGame {
             }
             
         }
-        $this->checkWin();
+        $this->checkWin();        
+
+        $this->db->updateBlocksOwner($this->blocksToChange[$user1], $user1);
+        $this->db->updateBlocksOwner($this->blocksToChange[$user2], $user2);
+
+        // $time_end = microtime_float();
+        // $time = $time_end - $time_start;
+        // $info = [];
+        // $info["time"] = "Total time: $time";
+        // $info["blocks"] = $this->blocksToChange;
+
+        // return $info;
         return "";
     }  
 
@@ -347,7 +346,10 @@ class ServiceGame {
         } else if ($block["gameUser"] == null && $block["colorId"] == $color) {
             $this->currentBoard[$y][$x]["gameUser"] = $user;
             $this->currentBoard[$y][$x]["colorId"] = $color;
-            $this->db->updateBlockOwner($block["id"], $user);
+            $changeBlock = [];
+            $changeBlock["id"] = $block["id"];
+            array_push($this->blocksToChange[$user], $block["id"]);
+            // $this->db->updateBlockOwner($block["id"], $user);
             return true;
         } else if ($block["gameUser"] == $user) {
             return true;
@@ -364,5 +366,5 @@ class ServiceGame {
             return false;
         }
         return true;
-    }  
+    } 
 }

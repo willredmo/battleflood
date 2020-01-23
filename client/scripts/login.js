@@ -5,7 +5,7 @@ function MyXHR(getPost,d,context){
         type: getPost,
         async: true,
         cache: false,
-        url:'mid.php',
+        url:'../server/mid.php',
         data:d,
         dataType:'json',
         context: context
@@ -39,7 +39,8 @@ $(document).ready(function() {
     $("#createButton").click((e) => {
         var data = {
             username: $(".create-form .username").val(),
-            password: $(".create-form .password").val()
+            password: $(".create-form .password").val(),
+            confirm: $(".create-form .confirm").val()
         }
         createAccount(data);
     });
@@ -63,7 +64,6 @@ function login(data) {
 
 function createAccount(data) {
     MyXHR('post', { method: "createUser", a: "user", data: JSON.stringify(data) }, this).done((json) => {
-        $(".create-form .password").val("");
         if (json.indexOf("Success") >= 0) {
             location.reload();
         } else {

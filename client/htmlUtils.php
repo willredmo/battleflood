@@ -24,6 +24,10 @@ function html_header($title="home"){
 	<!-- Material Icons -->
 	<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+	<!-- Popper -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" 
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+
 	<!-- Bootstrap -->
 	<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" rel="stylesheet">
 
@@ -165,6 +169,9 @@ function html_loginForm() {
 				<div class="form-group">
 					<input type="password" class="form-control password" placeholder="Password">
 				</div>
+				<div class="form-group">
+					<input type="password" class="form-control confirm" placeholder="Confirm Password">
+				</div>
 				<div class="back">
 					<a href="javascript:{}" id="hideCreate">Go Back</a>
 				</div>
@@ -190,7 +197,11 @@ function html_game($username) {
 				<span class="name"></span>
 				<span class="score"></span>
 			</div>
-			<div class="inputBlocks"></div>
+			<div class="inputBlocks">
+				<div class="loadingMove waiting">
+					<i class="material-icons">sync</i>
+				</div>
+			</div>
 		</div>
 		<div id="lobbyGameScreen">
 			<div>
@@ -221,14 +232,24 @@ function html_game($username) {
 					<button type="button" class="btn btn-secondary newGame">New Game</button>
 				</div>
 			</div>
+			<div id="chatIcon">
+				<i class="material-icons">
+					chat
+				</i>
+			</div>
 		</div>
 		<div class="section usersSection">
-			<h3>Online Users</h3>
+			<h3>
+				Online Users
+				<i id="helpIcon" class="material-icons">help_outline</i>
+			</h3>
 			<div id="users">
 			</div>
 		</div>
 		<div class="section chatSection">
-			<h3>Chat</h3>
+			<h3>
+				Chat 
+				<i id="closeChatIcon" class="material-icons">close</i></h3>
 			<div id="chat">
 				<div class="messages"></div>
 				<div class="input">
@@ -262,7 +283,6 @@ function html_game($username) {
 			<i class="material-icons">sync</i>
 		</div>
 	</div>
-	
 END;
 	return $string;
 }

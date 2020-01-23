@@ -5,7 +5,7 @@ session_name("gameLogin");
 session_start();
 
 require_once("htmlUtils.php");
-require_once("Service/ServiceUtils.php");
+require_once("../server/Service/ServiceUtils.php");
 
 $content = "";
 if (!loggedIn()) {
