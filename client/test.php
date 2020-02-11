@@ -6,6 +6,12 @@ require("../server/BizData/DBGame.class.php");
 
 require("../server/Service/ServiceGame.class.php");
 
+$_SERVER['DB_NAME'] = "battleflood";
+$dbUser = new DBUser();
+
+$dbUser->createUser("testtest", "testtest");
+
+
 
 // $db = new DBUser();
 // print_r($db->login("test", "test2"));
@@ -39,22 +45,22 @@ require("../server/Service/ServiceGame.class.php");
 
 // echo $db->createUser("testtest2", "testtest2");
 
-$db = new DBGame();
-// print_r($db2->getChat("testtest4"));
+// $db = new DBGame();
+// // print_r($db2->getChat("testtest4"));
 
 
 
-if ($db->isInGame("testtest1")) {
-    echo "In game";
-} else {
-    echo "Not in game";
-}
+// if ($db->isInGame("testtest1")) {
+//     echo "In game";
+// } else {
+//     echo "Not in game";
+// }
 
-echo "<br/>";
+// echo "<br/>";
 
-// print_r($db->getGameData("testtest1"));
+// // print_r($db->getGameData("testtest1"));
 
 
-$service = new ServiceGame();
+// $service = new ServiceGame();
 
-print_r($service->getBoard());
+// print_r($service->getBoard());

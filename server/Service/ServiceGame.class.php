@@ -1,7 +1,7 @@
 <?php
 
 if (session_status() == PHP_SESSION_NONE) {
-    // return;
+    return;
 }
 
 require_once(__DIR__.'/ServiceUtils.php');

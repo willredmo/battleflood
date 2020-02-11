@@ -15,6 +15,9 @@ if(!empty($_GET['method']) || !empty($_POST['method'])){
 	
 	$service;
 
+	// DB name
+	$_SERVER["DB_NAME"] = "battleflood";
+
 	if (!loggedIn()) {
 		// Must be logged in to use service
 		if ($cleanRequest['a'] == "user" && ($cleanRequest['method'] == "login" || $cleanRequest['method'] == "createUser")) {

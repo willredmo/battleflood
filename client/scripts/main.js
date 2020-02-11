@@ -24,12 +24,6 @@ class Main {
         this.getCurrentLobbyId();
         this.addMenuControls();
         this.getServerUsers();
-        this.initViewportHeight();
-    }
-
-    initViewportHeight() {
-        let vh = window.innerHeight * 0.01;
-        document.documentElement.style.setProperty('--vh', `${vh}px`);
     }
 
     // Resets lobby data and ui
@@ -115,12 +109,21 @@ class Main {
             trigger: "click"
         });
 
-        var showingChat = false;
-        $("#chatIcon").click(() => {
-            $(".chatSection, #chatIcon").addClass("showChat");
+        // Hide/show chat
+        $("#menuIcons .chat").click(() => {
+            $(".chatSection, #menuIcons").addClass("showChat");
+            this.chat.clearUnread();
         });
         $("#closeChatIcon").click(() => {
-            $(".chatSection, #chatIcon").removeClass("showChat");
+            $(".chatSection, #menuIcons").removeClass("showChat");
+        });
+
+        // Hide/show users
+        $("#menuIcons .users").click(() => {
+            $(".usersSection, #menuIcons").addClass("showUsers");
+        });
+        $("#closeUsersIcon").click(() => {
+            $(".usersSection, #menuIcons").removeClass("showUsers");
         });
     }
 

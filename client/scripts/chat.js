@@ -11,6 +11,7 @@ class Chat {
         this.MyXHR = main.MyXHR;
         this.chatRefresh = 1000;
         this.messages = new Map();
+        this.totalUnread = 0;
 
         this.getChat();
 
@@ -35,6 +36,7 @@ class Chat {
     reset() {
         this.messages = new Map();
         $('#chat .messages').empty();
+        this.clearUnread();
     }   
 
     // Gets chat data
@@ -133,6 +135,17 @@ class Chat {
         var dateString = hours +":"+ ((date.getMinutes() < 10)?"0":"") + date.getMinutes() +" "+ am_pm +"    |    "+ monthNames[date.getMonth()] +" "+ date.getDate();
         $(htmlMessage).find(".timestamp").html(dateString);
         $("#chat .messages").append(htmlMessage);
+
+        // Check if chat open
+        if (!$(".chatSection").hasClass("showChat")) {
+            this.totalUnread++;
+            $("#menuIcons .chat .badge").text(this.totalUnread);
+        }
+    }
+
+    clearUnread() {
+        this.totalUnread = 0;
+        $("#menuIcons .chat .badge").text("");
     }
 }
 

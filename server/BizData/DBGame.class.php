@@ -1,27 +1,19 @@
 <?php
 
 if (session_status() == PHP_SESSION_NONE) {
-    // return;
+    return;
 }
 
 require_once(__DIR__.'/meekrodb.2.3.class.php');
 
 class DBGame {
-	private $connection;
 	private $mdb;
 
     /**
 	 * Constructor for database
 	 */
 	function __construct() {
-		$this->connection = new mysqli($_SERVER['DB_SERVER'], $_SERVER['DB_USER'], $_SERVER['DB_PASSWORD'], $_SERVER['DB'], $_SERVER['DB_PORT']);
-
-		if ($this->connection->connect_error) {
-			echo "Connection failed: ".mysqli_connect_error();
-			die();
-		}
-
-		$this->mdb = new MeekroDB($_SERVER['DB_SERVER'], $_SERVER['DB_USER'], $_SERVER['DB_PASSWORD'], $_SERVER['DB'], $_SERVER['DB_PORT']);
+		$this->mdb = new MeekroDB($_SERVER['DB_SERVER'], $_SERVER['DB_USER'], $_SERVER['DB_PASSWORD'], $_SERVER['DB_NAME'], $_SERVER['DB_PORT']);
     }
 
 	// Check if user is in game

@@ -14,7 +14,7 @@ class DBUser {
 	 * Constructor for database
 	 */
 	function __construct() {
-		$this->mdb = new MeekroDB($_SERVER['DB_SERVER'], $_SERVER['DB_USER'], $_SERVER['DB_PASSWORD'], $_SERVER['DB'], $_SERVER['DB_PORT']);
+		$this->mdb = new MeekroDB($_SERVER['DB_SERVER'], $_SERVER['DB_USER'], $_SERVER['DB_PASSWORD'], $_SERVER['DB_NAME'], $_SERVER['DB_PORT']);
     }
     
     /**
@@ -58,8 +58,8 @@ class DBUser {
 
 	// Gets users in lobby
 	function getLobbyUsers($username) {
-		$usernames = $this->mdb->queryOneColumn("username", "SELECT g.username FROM lobby as l LEFT OUTER JOIN gameuser as g ON l.id = g.lobbyId
-			WHERE g.isOnline = 1 AND l.id IN (SELECT l.id FROM lobby as l LEFT OUTER JOIN gameuser as g ON l.id = g.lobbyId WHERE g.username = %s)", $username);
+		$usernames = $this->mdb->queryOneColumn("username", "SELECT g.username FROM lobby as l LEFT OUTER JOIN gameUser as g ON l.id = g.lobbyId
+			WHERE g.isOnline = 1 AND l.id IN (SELECT l.id FROM lobby as l LEFT OUTER JOIN gameUser as g ON l.id = g.lobbyId WHERE g.username = %s)", $username);
 		
 		// error_log( print_r($usernames, true)."\n", 3, __DIR__."/test.log");
 		return $usernames;

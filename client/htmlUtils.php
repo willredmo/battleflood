@@ -232,16 +232,17 @@ function html_game($username) {
 					<button type="button" class="btn btn-secondary newGame">New Game</button>
 				</div>
 			</div>
-			<div id="chatIcon">
-				<i class="material-icons">
-					chat
-				</i>
+			<div id="menuIcons">
+				<i class="material-icons chat">chat<span class="badge badge-pill badge-danger"></span></i>
+				<div class="line"></div>
+				<i class="material-icons users">people</i>
 			</div>
 		</div>
 		<div class="section usersSection">
 			<h3>
 				Online Users
 				<i id="helpIcon" class="material-icons">help_outline</i>
+				<i id="closeUsersIcon" class="material-icons">close</i></h3>
 			</h3>
 			<div id="users">
 			</div>
