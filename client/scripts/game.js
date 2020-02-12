@@ -65,27 +65,37 @@ class Game {
     // Sends request for colors for input
     getColors() {
         this.MyXHR('get', { method: "getCurrentColors", a: "game", data: "" }, this).done((json) => {
-            this.displayInputBlocks(json);
+            this.colors = json;
+            this.displayInputBlocks();
         });
     }
 
     // Displays input blocks
-    displayInputBlocks(data) {
-        this.colors = data;
-        var totalColors = data.length;
-        var divWidth = $("#game .inputBlocks").width();
-        if (window.innerWidth < 500) {
-            divWidth = window.innerWidth;
+    displayInputBlocks() {
+        // Issue on mobile where width is 0
+        if ($("#game .inputBlocks").width() == 0) {
+            setTimeout(() => {
+                this.displayInputBlocks();
+            });
+            return;
         }
+        var totalColors = this.colors.length;
+        var divWidth = $("#game .inputBlocks").width();
         var divHeight = $("#game .inputBlocks").height();
+        
         var blockSide = divWidth / totalColors;
-
+        if (blockSide > divHeight) {
+            blockSide = divHeight;
+        }
+        // Center horizontal
+        var leftPadding = (divWidth - (blockSide * totalColors)) / 2;
+        var topPadding = ((divHeight - blockSide) / 2);
         var padding = 10;
         blockSide -= padding;
-        
+
         var i = 0;
-        data.forEach(color => {
-            this.svgInputBlocks.rect(blockSide, blockSide).attr({ fill: color.colorValue, id: "inputBlock_" + color.id }).x(padding/2 + i*blockSide + padding*i).y(padding/2)
+        this.colors.forEach(color => {
+            this.svgInputBlocks.rect(blockSide, blockSide).attr({ fill: color.colorValue, id: "inputBlock_" + color.id }).x(leftPadding + (padding/2 + i*blockSide + padding*i)).y(topPadding + (padding/2))
                 .click((e) => { 
                     this.sendMove(color.id);
                 } 
@@ -475,5 +485,18 @@ class Game {
            }
         }
         return null;
+    }
+
+    // Resize svg elements
+    resize() {
+        // Input blocks
+        this.svgInputBlocks.clear();
+        this.displayInputBlocks();
+        this.updateInputBlocks();
+
+        // Game blocks
+        this.svgGameBlocks.clear();
+        this.displayBlocks();
+        this.displayBlockSides();
     }
 }

@@ -24,6 +24,7 @@ class Main {
         this.getCurrentLobbyId();
         this.addMenuControls();
         this.getServerUsers();
+        this.handleScreenSizeChange();
     }
 
     // Resets lobby data and ui
@@ -315,6 +316,13 @@ class Main {
             console.log(d);
             console.log("AJAX error");
             console.log(err.responseText);
+        });
+    }
+
+    // Screen size change
+    handleScreenSizeChange() {
+        $(window).resize(() => {
+            this.game.resize();
         });
     }
 }

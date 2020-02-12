@@ -14,7 +14,7 @@ class DBUser {
 	 * Constructor for database
 	 */
 	function __construct() {
-		$this->mdb = new MeekroDB($_SERVER['DB_SERVER'], $_SERVER['DB_USER'], $_SERVER['DB_PASSWORD'], $_SERVER['DB_NAME'], $_SERVER['DB_PORT']);
+		$this->mdb = new MeekroDB($_SERVER['DB_SERVER'], $_SERVER['DB_USER'], $_SERVER['DB_PASSWORD'], "battleflood", $_SERVER['DB_PORT']);
     }
     
     /**

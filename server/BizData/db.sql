@@ -94,12 +94,3 @@ CREATE TABLE gameBlock (
 		ON DELETE CASCADE
         ON UPDATE CASCADE
 ) ENGINE=InnoDB;
-
--- For debugging
--- DROP TABLE gameBlock;
--- DROP TABLE color;
--- DROP TABLE game;
--- DROP TABLE challenge;
--- DROP TABLE message;
--- DROP TABLE gameUser;
--- DROP TABLE lobby;
