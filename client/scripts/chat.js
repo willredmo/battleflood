@@ -74,7 +74,7 @@ class Chat {
                 var message = {
                     username: messageData.username,
                     text: messageData.text,
-                    timestamp: new Date(messageData.timestamp)
+                    timestamp: new Date(messageData.timestamp.replace(" ", "T"))
                 }
                 this.messages.set(messageData.id, message);
 
@@ -98,8 +98,8 @@ class Chat {
                     var message = {
                         username: messageData.username,
                         text: messageData.text,
-                        timestamp: new Date(messageData.timestamp)
-                    }
+                        timestamp: new Date(messageData.timestamp.replace(" ", "T"))
+                    };
                     this.messages.set(messageData.id, message);
 
                     // Display

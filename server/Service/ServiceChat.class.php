@@ -22,9 +22,12 @@ class ServiceChat {
         if ($text == "") {
             return "Empty message";
         } else if (strlen($text) > 200) {
-            return "Message longer than 200 characters";
+            return "Message is longer than 200 characters";
         }   
-        $this->db->sendMessage(getUsername(), $text);
+        // Profanity filter
+        $filteredMessage = file_get_contents("https://www.purgomalum.com/service/plain?text=".rawurlencode($text));
+        echo "\n\nMessage: $filteredMessage";
+        $this->db->sendMessage(getUsername(), $filteredMessage);
         return "";
     }
 
