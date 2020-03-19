@@ -167,15 +167,27 @@ main {
 		background-color: @textPrimaryColor;
 		z-index: 1;
 		border-radius: 20px;
-		padding: 10px;
+		overflow: hidden;
 		span {
 			display: block;
+			padding: 8px;
 		}
 		.result {
 			text-align: center;
 			padding: 10px 0;
 			font-size: 2.2rem;
+			color: whitesmoke;
 		}
+		.result.won {
+			background-color: #377846;
+		}
+		.result.lost {
+			background-color: #8c2b26;
+		}
+		.result.tie {
+			background-color: #54585c;
+		}
+
 		button {
 			margin-left: 90px;
 			margin-top: 20px;

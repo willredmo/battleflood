@@ -279,7 +279,7 @@ class ServiceGame {
         if ($board["gameUser1Score"] > $board["totalBlocks"]/2) {
             $this->db->setWinner($board["id"], $board["gameUser1"]);
         } else if ($board["gameUser2Score"] > $board["totalBlocks"]/2) {
-            $this->db->setWinner($board["id"], $board["gameUser1"]);
+            $this->db->setWinner($board["id"], $board["gameUser2"]);
         } else if ($board["gameUser1Score"] == $board["totalBlocks"]/2 && $board["gameUser1Score"] == $board["gameUser2Score"]) {
             $this->db->setWinner($board["id"], "tie");
         }

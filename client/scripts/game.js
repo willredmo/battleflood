@@ -443,12 +443,16 @@ class Game {
     displayWinner(data) {
         this.userWon = data.gameUserWon;
         $("#gameOver").show();
+        $("#gameOver .result").removeClass("won tie lost");
         if (this.userWon == this.username) {
             $("#gameOver .result").html("You Won");
+            $("#gameOver .result").addClass("won");
         } else if (this.userWon == "tie") {
             $("#gameOver .result").html("Tied");
+            $("#gameOver .result").addClass("tie");
         } else {
             $("#gameOver .result").html("You Lost");
+            $("#gameOver .result").addClass("lost");
         }
         if (this.username == this.user1) {
             $("#gameOver .user1").html("Your final score: " + this.user1Score);
