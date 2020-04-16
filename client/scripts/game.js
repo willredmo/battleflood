@@ -1,5 +1,12 @@
 var mainLobby = 0;
 
+var colorBlindColors = new Map();
+colorBlindColors.set("#F6511D", "#ff0800");
+colorBlindColors.set("#FFB400", "#fcba03");
+colorBlindColors.set("#00A6ED", "#00ffbf");
+colorBlindColors.set("#0D2C54", "#0400ff");
+colorBlindColors.set("#7FB800", "#ff00d9");
+
 // Class that handles game stuff
 class Game {
     constructor(main) {
@@ -25,6 +32,8 @@ class Game {
         this.user1Color = null;
         this.user2Color = null;
         this.userWon = null;
+
+        this.isColorblind = false;
 
         this.getColors();
         this.stopRequesting = true;
@@ -66,6 +75,12 @@ class Game {
     getColors() {
         this.MyXHR('get', { method: "getCurrentColors", a: "game", data: "" }, this).done((json) => {
             this.colors = json;
+            if (this.isColorblind) {
+                for (var i = 0; i < this.colors.length; i++) {
+                    this.colors[i].colorValue = colorBlindColors.get(this.colors[i].colorValue);
+                }
+            }
+            
             this.displayInputBlocks();
         });
     }
@@ -258,7 +273,12 @@ class Game {
                 var localBlock = this.blocks[block.y][block.x];
                 if (block.colorValue != localBlock.colorValue) {
                     this.blocks[block.y][block.x].colorValue = block.colorValue;
-                    SVG.get("#block_"+ block.id).fill(block.colorValue);
+
+                    var fillColor = block.colorValue;
+                    if (this.isColorblind) {
+                        fillColor = colorBlindColors.get(fillColor);
+                    }
+                    SVG.get("#block_"+ block.id).fill(fillColor);
                 }
                 if (block.gameUser != localBlock.gameUser) {
                     this.blocks[block.y][block.x].gameUser = block.gameUser;
@@ -299,7 +319,12 @@ class Game {
         for (var y = 0; y < this.height; y++) {
             for (var x = 0; x < this.width; x++) {
                 var block = this.blocks[y][x];
-                this.svgGameBlocks.rect(blockSide, blockSide).attr({ fill: block.colorValue, id: "block_" + block.id })
+                var fillColor = block.colorValue;
+                if (this.isColorblind) {
+                    fillColor = colorBlindColors.get(fillColor);
+                }
+                console.log(fillColor);
+                this.svgGameBlocks.rect(blockSide, blockSide).attr({ fill: fillColor, id: "block_" + block.id })
                     .x(leftPadding + block.x*blockSide).y(topPadding + block.y*blockSide);
             }
         }
@@ -502,5 +527,19 @@ class Game {
         this.svgGameBlocks.clear();
         this.displayBlocks();
         this.displayBlockSides();
+    }
+
+    getColorblindMode() {
+        return this.isColorblind;
+    }
+
+    setColorblindMode(isColorblind) {
+        this.isColorblind = isColorblind;
+        this.getColors();
+        if (this.isColorblind) {
+            $("#game").addClass("colorblind");
+        } else {
+            $("#game").removeClass("colorblind");
+        }
     }
 }

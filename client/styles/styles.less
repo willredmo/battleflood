@@ -61,7 +61,7 @@ main {
 	display: flex;
 	justify-content: center;
 	align-items: center;
-	div {
+	> div {
 		overflow: hidden;
 		border-radius: 20px;	
 		width: 400px;
@@ -77,6 +77,28 @@ main {
 		p {
 			font-size: 1.3rem;
 			padding: 10px;
+		}
+	}
+}
+
+#lobbyGameScreen, #tooltipPopover {
+	.colorblind {
+		h2 {
+			font-weight: 300;
+			font-size: 30px;
+			padding-left: 20px;
+		}
+		.btn-group {
+			margin-left: 20px;
+			margin-bottom: 10px;
+			label {
+				background-color: #f8f9fa;
+				color: #212529;
+				&.active {
+					color: #f8f9fa;
+					background-color: #007bff;
+				}
+			}
 		}
 	}
 }

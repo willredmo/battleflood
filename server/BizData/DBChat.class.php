@@ -30,6 +30,6 @@ class DBChat {
 	 */
 	function getChat($username) {
 		return $this->mdb->query("SELECT m.gameUserId as username, m.text, m.timestamp, m.id
-			FROM gameUser AS g JOIN message AS m ON m.lobbyId = g.lobbyId WHERE g.username = %s", $username);
+			FROM gameUser AS g JOIN message AS m ON m.lobbyId = g.lobbyId WHERE g.username = %s AND m.timestamp > (NOW() - INTERVAL 24 HOUR)", $username);
 	}
 }

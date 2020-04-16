@@ -1,5 +1,7 @@
 <?php
 
+return;
+
 require("../server/BizData/DBUser.class.php");
 require("../server/BizData/DBChat.class.php");
 require("../server/BizData/DBGame.class.php");

@@ -105,9 +105,49 @@ class Main {
         });
 
         $("#helpIcon").popover({
-            content: "To start a game you can challenge a player by selecting the user or challenge a bot by selecting yourself",
+            html: true,
+            content: `
+                <div id="tooltipPopover">
+                    <p>To start a game you can challenge a player by clicking on the user or challenge a bot by clicking yourself</p>
+                    <div class="colorblind">
+                        <hr/>
+                        <h2>Colorblind Mode</h2>
+                        <div class="btn-group btn-group-toggle" data-toggle="buttons">
+                            <label class="btn btn-primary off active">
+                                <input type="radio" name="options" autocomplete="off"> Off
+                            </label>
+                            <label class="btn btn-primary on">
+                                <input type="radio" name="options" autocomplete="off"> On
+                            </label>
+                        </div>
+                    </div>
+                <div>`,
             placement: "bottom",
             trigger: "click"
+        });
+
+        // Set up colorblind event
+        $("#helpIcon").on("inserted.bs.popover", () => {
+            // Set correct value
+            var isColorblind = this.game.getColorblindMode();
+            console.log(isColorblind);
+            $("#tooltipPopover label").removeClass("active");
+            if (isColorblind) {
+                $("#tooltipPopover label.on").addClass("active");
+            } else {
+                $("#tooltipPopover label.off").addClass("active");
+            }
+            $("#tooltipPopover .btn").click((e) => {
+                var value = e.target.childNodes[2].nodeValue.replace(/\s/g, '');
+                $("#lobbyGameScreen .colorblind label").removeClass("active");
+                if (value == "On") {
+                    this.game.setColorblindMode(true);
+                    $("#lobbyGameScreen .colorblind label.on").addClass("active");
+                } else if (value == "Off") {
+                    this.game.setColorblindMode(false);
+                    $("#lobbyGameScreen .colorblind label.off").addClass("active");
+                }
+            });
         });
 
         // Hide/show chat
@@ -125,6 +165,16 @@ class Main {
         });
         $("#closeUsersIcon").click(() => {
             $(".usersSection, #menuIcons").removeClass("showUsers");
+        });
+
+        // Add color blind mode
+        $(".colorblind .btn").click(e => {
+            var value = e.target.childNodes[2].nodeValue.replace(/\s/g, '');
+            if (value == "On") {
+                this.game.setColorblindMode(true);
+            } else if (value == "Off") {
+                this.game.setColorblindMode(false);
+            }
         });
     }
 

@@ -19,7 +19,7 @@ class ServiceChat {
 
     // Sends message
     function sendMessage($text) {
-        if ($text == "") {
+        if (strlen($text) == 0) {
             return "Empty message";
         } else if (strlen($text) > 200) {
             return "Message is longer than 200 characters";

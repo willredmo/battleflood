@@ -78,8 +78,13 @@ class ServiceGame {
         }
         
 
-        $width = 25;
-        $height = 30;
+        $width = 20;
+        $height = 25;
+
+
+        // $width = 5;
+        // $height = 5;
+
         $gameId;
         // Delete any old games
         $this->db->deleteOldGames($currentUser);
@@ -258,10 +263,11 @@ class ServiceGame {
             }
             
         }
-        $this->checkWin();        
 
         $this->db->updateBlocksOwner($this->blocksToChange[$user1], $user1);
         $this->db->updateBlocksOwner($this->blocksToChange[$user2], $user2);
+
+        $this->checkWin(); 
 
         // $time_end = microtime_float();
         // $time = $time_end - $time_start;

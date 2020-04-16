@@ -207,6 +207,18 @@ function html_game($username) {
 			<div>
 				<h1>Welcome to BattleFlood</h2>
 				<p>To start a game you can challenge a player by clicking on the user or challenge a bot by clicking yourself</p>
+				<div class="colorblind">
+					<hr/>
+					<h2>Colorblind Mode</h2>
+					<div class="btn-group btn-group-toggle" data-toggle="buttons">
+						<label class="btn btn-primary off active">
+							<input type="radio" name="options" autocomplete="off"> Off
+						</label>
+						<label class="btn btn-primary on">
+							<input type="radio" name="options" autocomplete="off"> On
+						</label>
+					</div>
+				</div>
 			</div>	
 		</div>
 		<div id="gameOver">
